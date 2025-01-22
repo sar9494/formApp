@@ -1,13 +1,12 @@
 import * as React from "react"
-export const Logo = (props) => {
-    return (
-        <svg
+export const Logo = () => {
+  return (
+    <svg
     xmlns="http://www.w3.org/2000/svg"
     xmlnsXlink="http://www.w3.org/1999/xlink"
     width={60}
     height={60}
     fill="none"
-    {...props}
   >
     <path fill="url(#a)" d="M0 0h60v60H0z" />
     <defs>
@@ -27,5 +26,5 @@ export const Logo = (props) => {
       />
     </defs>
   </svg>
-    )
+  )
 }
