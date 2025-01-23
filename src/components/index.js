@@ -1,5 +1,6 @@
 export * from "./Logo"
 export * from "./ImageInputIcon"
+export * from "./BackIcon"
 export * from "./Header"
 export * from "./InputBox"
 export * from "./ContinueButton"

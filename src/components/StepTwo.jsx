@@ -31,8 +31,6 @@ export const StepTwo = (props) => {
     } else if (e.target.placeholder.includes("password")) {
       setFormValue({ ...formValue, pass: e.target.value });
     }
-
-    console.log(formValue);
   };
 
   const checkValue = () => {

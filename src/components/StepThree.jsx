@@ -2,29 +2,40 @@
 
 import { useState, useEffect } from "react";
 import moment from "moment";
-import { Header, ContinueButton, BackButton, ImageInputIcon } from "./index";
+import {
+  Header,
+  ContinueButton,
+  BackButton,
+  ImageInputIcon,
+  BackIcon,
+} from "./index";
 
 export const StepThree = (props) => {
   const { step, setStep } = props;
   const [formValue, setFormValue] = useState({});
   const [errors, setErrors] = useState({});
+  const [isClick, setIsClick] = useState(true);
 
   const onChange = (e) => {
-    if (e.target.name == "date") {
-      setFormValue({ ...formValue, date: e.target.value });
+    const { name, type, value, files } = e.target;
+    if (name == "date") {
+      setFormValue({ ...formValue, date: value });
       setErrors({});
     }
-    console.log(e.target.value);
-    if(e.target.name == "profile"){
-      console.log(e.target);
-      
+
+    if (name === "profile" && type === "file") {
+      const file = files[0];
+      if (file) {
+        const fileUrl = URL.createObjectURL(file);
+        setFormValue({ ...formValue, profile: fileUrl });
+        setIsClick(false);
+      }
     }
   };
   const checkValue = () => {
     let newError = {};
     if (!formValue.date) {
       newError.date = "Төрсөн өдрөө оруулна уу";
-      console.log(newError);
     } else {
       const year = parseInt(
         moment(formValue.date.split("-").join(""), "YYYYMMDD")
@@ -36,13 +47,12 @@ export const StepThree = (props) => {
       }
     }
     setErrors(newError);
-    Object.keys(newError).length==0&&setStep(4)
+    Object.keys(newError).length == 0 && setStep(4);
   };
-  //   useEffect(()=>{
-  //     console.log(formValue);
-
-  //     console.log(errors);
-  //   },[formValue,errors])
+  const backIconClick = () => {
+    setFormValue({...formValue,profile:""})
+    setIsClick(true)
+  }
 
   return (
     <div className="w-[480px] h-[655px] bg-white rounded-xl flex flex-col gap-4 justify-between p-8">
@@ -60,15 +70,36 @@ export const StepThree = (props) => {
           />
           <p className="text-red-500">{errors?.date}</p>
           <div className="">
-          <label className="font-semibold">
-            Profile image <b className="text-red-500">*</b>
-          </label>
-          <label name="profile" className="cursor-pointer w-[416px] h-[180px] bg-[#F4F4F4] rounded-md flex flex-col justify-center items-center relative">
-            <ImageInputIcon />
-            <h3>Browse or Drop Image</h3>
-            <input hidden type="file" accept="image/*" name="profile" onClick={onChange}/>
-          </label>
-          
+            <label className="font-semibold">
+              Profile image <b className="text-red-500">*</b>
+            </label>
+            <label
+              name="profile"
+              className="cursor-pointer w-[416px] h-[180px] bg-[#F4F4F4] rounded-md flex flex-col justify-center items-center relative"
+            >
+              {formValue.profile && (
+                <>
+                  <img
+                    src={formValue.profile}
+                    className="w-full h-full rounded-md"
+                  ></img>
+                  <BackIcon className="absolute top-[20px] right-[20px]" onClick={backIconClick} />
+                </>
+              )}
+              {!formValue.profile &&isClick && (
+                <>
+                  <ImageInputIcon />
+                  <h3>Browse or Drop Image</h3>
+                  <input
+                  hidden
+                  type="file"
+                  accept="image/*"
+                  name="profile"
+                  onChange={onChange}
+                />
+                </>
+              )}
+            </label>
           </div>
         </div>
       </div>

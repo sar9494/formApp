@@ -25,7 +25,6 @@ export const StepOne = (props) => {
     if (e.target.placeholder.includes("user")) {
       setFormValue({ ...formValue, username: e.target.value });
     }
-    console.log(formValue);
   };
 
   const checkValue = () => {
