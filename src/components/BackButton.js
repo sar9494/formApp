@@ -6,6 +6,6 @@ export const BackButton = (props) =>{
     }
 
     return (
-        <button className="border border-[#CBD5E1] w-[128px] h=[44px] rounded-md" onClick={onClick}>{`< Back`}</button>
+        <button className="border border-[#CBD5E1] w-[128px] h=[44px] rounded-md cursor-pointer hover:opacity-50" onClick={onClick}>{`< Back`}</button>
     )
 }

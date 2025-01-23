@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState , useEffect} from "react";
 import moment from "moment";
 import {
   Header,
@@ -12,9 +12,10 @@ import {
 
 export const StepThree = (props) => {
   const { step, setStep } = props;
-  const [formValue, setFormValue] = useState({});
+  const [formValue, setFormValue] = useState(() => {
+    return JSON.parse(localStorage.getItem("stepThree") || "{}");
+  });
   const [errors, setErrors] = useState({});
-  const [isClick, setIsClick] = useState(true);
 
   const onChange = (e) => {
     const { name, type, value, files } = e.target;
@@ -22,13 +23,11 @@ export const StepThree = (props) => {
       setFormValue({ ...formValue, date: value });
       setErrors({});
     }
-
     if (name === "profile" && type === "file") {
       const file = files[0];
       if (file) {
         const fileUrl = URL.createObjectURL(file);
         setFormValue({ ...formValue, profile: fileUrl });
-        setIsClick(false);
       }
     }
   };
@@ -45,14 +44,24 @@ export const StepThree = (props) => {
       if (year < 18) {
         newError.date = "Та 18 ба түүнээс дээш настай байх ёстой.";
       }
+      else{
+        localStorage.setItem("date",formValue.date)
+      }
+    }
+    if(!formValue.profile){
+      newError.profile="Профайл зурагаа оруулна уу"
     }
     setErrors(newError);
-    Object.keys(newError).length == 0 && setStep(4);
+    Object.keys(newError).length == 0 && setStep(4); 
+    Object.keys(newError).length == 0 && localStorage.clear();
   };
   const backIconClick = () => {
-    setFormValue({...formValue,profile:""})
-    setIsClick(true)
-  }
+    setFormValue({ ...formValue, profile: "" });
+  };
+
+  useEffect(()=>{
+    localStorage.setItem("stepThree",JSON.stringify(formValue))
+  },[formValue])
 
   return (
     <div className="w-[480px] h-[655px] bg-white rounded-xl flex flex-col gap-4 justify-between p-8">
@@ -63,43 +72,53 @@ export const StepThree = (props) => {
             Date of birth <b className="text-red-500">*</b>
           </label>
           <input
-            type="date"
-            className="p-3 outline-blue-600 border rounded-md"
+            type="date" //"p-3 outline-blue-600 border rounded-md"
+            className={!errors?.date?("p-3 outline-blue-600 border rounded-md") :("p-3 border-red-500 border rounded-md")}
             name="date"
             onChange={onChange}
+            value={formValue.date||""}
+            
           />
           <p className="text-red-500">{errors?.date}</p>
           <div className="">
             <label className="font-semibold">
               Profile image <b className="text-red-500">*</b>
             </label>
-            <label
-              name="profile"
-              className="cursor-pointer w-[416px] h-[180px] bg-[#F4F4F4] rounded-md flex flex-col justify-center items-center relative"
-            >
-              {formValue.profile && (
-                <>
-                  <img
-                    src={formValue.profile}
-                    className="w-full h-full rounded-md"
-                  ></img>
-                  <BackIcon className="absolute top-[20px] right-[20px]" onClick={backIconClick} />
-                </>
-              )}
-              {!formValue.profile &&isClick && (
-                <>
-                  <ImageInputIcon />
-                  <h3>Browse or Drop Image</h3>
-                  <input
+            {formValue?.profile && (
+              <div
+                name="profile"
+                className="cursor-pointer w-[416px] h-[180px] bg-[#F4F4F4] rounded-md flex flex-col justify-center items-center relative"
+              >
+                <img
+                  src={formValue.profile}
+                  className="w-full h-full rounded-md"
+                ></img>
+                <BackIcon
+                  className="absolute top-[20px] right-[20px]"
+                  onClick={backIconClick}
+                />
+              </div>
+            )}
+            {!formValue?.profile && (
+              <>
+              <label
+                name="profile"
+                className="cursor-pointer w-[416px] h-[180px] bg-[#F4F4F4] rounded-md flex flex-col justify-center items-center relative"
+              >
+                <ImageInputIcon />
+                <h3>Browse or Drop Image</h3>
+                <input
                   hidden
                   type="file"
                   accept="image/*"
                   name="profile"
                   onChange={onChange}
                 />
-                </>
-              )}
-            </label>
+              </label>
+                <p className="text-red-600">{errors?.profile}</p>
+              </>
+              
+            )}
           </div>
         </div>
       </div>

@@ -1,19 +1,19 @@
 "use client";
 
 import { Header, InputBox, ContinueButton } from "./index";
-import { useState } from "react";
-
-const INPUTS = [
-  { text: "First name ", placeholder: "Your first name" },
-  { text: "Last name ", placeholder: "Your last name" },
-  { text: "Username ", placeholder: "Your username" },
-];
+import { useEffect, useState } from "react";
 
 export const StepOne = (props) => {
   const { step, setStep } = props;
-  const [formValue, setFormValue] = useState([]);
-  const [errors, setErrors] = useState([]);
+  const [formValue, setFormValue] = useState(() => {
+    return JSON.parse(localStorage.getItem("stepOne") || "{}");
+  });
+  const [errors, setErrors] = useState({});
   const check = /^[a-zA-Z]+$/;
+
+  useEffect(() => {
+    localStorage.setItem("stepOne", JSON.stringify(formValue));
+  }, [formValue]);
 
   const onChange = (e) => {
     if (e.target.placeholder.includes("first")) {
@@ -29,23 +29,20 @@ export const StepOne = (props) => {
 
   const checkValue = () => {
     let newErrors = {};
-
-    // Validate each field and add errors if necessary
     if (!formValue.firstname || !check.test(formValue.firstname)) {
-      newErrors.first = "Нэрээ оруулна уу";
+      newErrors.firstname = "Нэрээ оруулна уу";
     }
 
     if (!formValue.lastname || !check.test(formValue.lastname)) {
-      newErrors.last = "Овгоо оруулна уу.";
+      newErrors.lastname = "Овгоо оруулна уу.";
     }
 
     if (!formValue.username) {
-      newErrors.user = "Хэрэглэгчийн нэрээ оруулна уу";
+      newErrors.username = "Хэрэглэгчийн нэрээ оруулна уу";
     }
 
     setErrors(newErrors);
-    Object.keys(newErrors).length==0&&setStep(2)
-    
+    Object.keys(newErrors).length == 0 && setStep(2);
   };
 
   return (
@@ -53,31 +50,30 @@ export const StepOne = (props) => {
       <div key={1} className="flex flex-col gap-4 mx-auto">
         <Header />
         <div key={1} className="flex flex-col gap-2">
-          {INPUTS.map((el, index) => (
-            <div key={index}>
-              <InputBox
-                text={el.text}
-                placeholder={el.placeholder}
-                onChange={onChange}
-                value={el.text}
-                type={"text"}
-              />
-              {Object.keys(errors).map((each) => {
-                // Check if the current error key matches the input field
-                if (el.placeholder.includes(each)) {
-                  return (
-                    <p key={each} className="text-red-500">
-                      {errors[each]}
-                    </p>
-                  );
-                }
-                return null;
-              })}
-            </div>
-          ))}
+          <InputBox
+            texts={{text:"First name", placeholder:"Your first name", type:"text"}}
+            onChange={onChange}
+            value={formValue.firstname||""}
+            errors={errors.firstname}
+          />
+          <p className="text-red-500">{errors?.firstname}</p>
+          <InputBox
+          texts={{text:"Last name", placeholder:"Your last name", type:"text"}}
+            onChange={onChange}
+            value={formValue.lastname||""}
+            errors={errors.lastname}
+          />
+          <p className="text-red-500">{errors?.lastname}</p>
+          <InputBox
+          texts={{text:"Username", placeholder:"Your username", type:"text"}}
+            onChange={onChange}
+            value={formValue.username||""}
+            errors={errors.username}
+          />
+          <p className="text-red-500">{errors?.username}</p>
         </div>
       </div>
-      <ContinueButton onClick={checkValue} text={"Continue 1/3"}/>
+      <ContinueButton onClick={checkValue} text={"Continue 1/3"} />
     </div>
   );
 };
