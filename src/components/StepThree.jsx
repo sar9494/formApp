@@ -14,6 +14,11 @@ export const StepThree = (props) => {
       setFormValue({ ...formValue, date: e.target.value });
       setErrors({});
     }
+    console.log(e.target.value);
+    if(e.target.name == "profile"){
+      console.log(e.target);
+      
+    }
   };
   const checkValue = () => {
     let newError = {};
@@ -54,15 +59,16 @@ export const StepThree = (props) => {
             onChange={onChange}
           />
           <p className="text-red-500">{errors?.date}</p>
-          <div className="cursor-pointer ">
+          <div className="">
           <label className="font-semibold">
             Profile image <b className="text-red-500">*</b>
           </label>
-          <div className="w-[416px] h-[180px] bg-[#F4F4F4] rounded-md flex flex-col justify-center items-center relative">
+          <label name="profile" className="cursor-pointer w-[416px] h-[180px] bg-[#F4F4F4] rounded-md flex flex-col justify-center items-center relative">
             <ImageInputIcon />
             <h3>Browse or Drop Image</h3>
-          </div>
-          <input hidden type="file" accept="image/*"/>
+            <input hidden type="file" accept="image/*" name="profile" onClick={onChange}/>
+          </label>
+          
           </div>
         </div>
       </div>
