@@ -1,5 +1,5 @@
 'use client';
-import { StepOne, StepTwo, StepThree ,StepFour} from "@/components";
+import { StepOne, StepTwo, StepThree, StepFour } from "@/components";
 import { useState } from "react";
 export default function Home() {
   const [step, setStep] = useState(1)

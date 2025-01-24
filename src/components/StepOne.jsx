@@ -2,18 +2,21 @@
 
 import { Header, InputBox, ContinueButton } from "./index";
 import { useEffect, useState } from "react";
-import { motion } from "motion/react"
+import { motion } from "motion/react";
 
 export const StepOne = (props) => {
   const { step, setStep } = props;
   const [formValue, setFormValue] = useState(() => {
-    return JSON.parse(localStorage.getItem("stepOne") || "{}");
+    return JSON.parse(
+      (typeof window !== "undefined" && localStorage.getItem("stepOne")) || "{}"
+    );
   });
   const [errors, setErrors] = useState({});
   const check = /^[a-zA-Z]+$/;
 
   useEffect(() => {
-    localStorage.setItem("stepOne", JSON.stringify(formValue));
+    if (typeof window !== "undefined")
+      localStorage.setItem("stepOne", JSON.stringify(formValue));
   }, [formValue]);
 
   const onChange = (e) => {
@@ -47,29 +50,43 @@ export const StepOne = (props) => {
   };
 
   return (
-    <motion.div className="w-[480px] h-[655px] bg-white rounded-xl flex flex-col gap-4 justify-between p-8 w3-animation-top"
-    animate={{ x: [0, 100, 0] }}>
+    <motion.div
+      className="w-[480px] h-[655px] bg-white rounded-xl flex flex-col gap-4 justify-between p-8 w3-animation-top"
+      animate={{ x: [0, 100, 0] }}
+    >
       <div key={1} className="flex flex-col gap-4 mx-auto">
         <Header />
         <div key={1} className="flex flex-col gap-2">
           <InputBox
-            texts={{text:"First name", placeholder:"Your first name", type:"text"}}
+            texts={{
+              text: "First name",
+              placeholder: "Your first name",
+              type: "text",
+            }}
             onChange={onChange}
-            value={formValue.firstname||""}
+            value={formValue.firstname || ""}
             errors={errors.firstname}
           />
           <p className="text-red-500">{errors?.firstname}</p>
           <InputBox
-          texts={{text:"Last name", placeholder:"Your last name", type:"text"}}
+            texts={{
+              text: "Last name",
+              placeholder: "Your last name",
+              type: "text",
+            }}
             onChange={onChange}
-            value={formValue.lastname||""}
+            value={formValue.lastname || ""}
             errors={errors.lastname}
           />
           <p className="text-red-500">{errors?.lastname}</p>
           <InputBox
-          texts={{text:"Username", placeholder:"Your username", type:"text"}}
+            texts={{
+              text: "Username",
+              placeholder: "Your username",
+              type: "text",
+            }}
             onChange={onChange}
-            value={formValue.username||""}
+            value={formValue.username || ""}
             errors={errors.username}
           />
           <p className="text-red-500">{errors?.username}</p>

@@ -1,13 +1,14 @@
 "use client";
-import { useState ,useEffect} from "react";
+import { useState, useEffect } from "react";
 import { Header, InputBox, ContinueButton, BackButton } from "./index";
-import { motion } from "motion/react"
-
+import { motion } from "motion/react";
 
 export const StepTwo = (props) => {
   const { step, setStep } = props;
-  const [formValue, setFormValue] = useState(()=>{
-    return JSON.parse(localStorage.getItem("stepTwo")||"{}")
+  const [formValue, setFormValue] = useState(() => {
+    return JSON.parse(
+      (typeof window !== "undefined" && localStorage.getItem("stepTwo")) || "{}"
+    );
   });
   const [errors, setErrors] = useState({});
   const checkPassword = /^(?=.*\d)(?=.*[a-zA-Z]).+$/;
@@ -27,21 +28,20 @@ export const StepTwo = (props) => {
     }
   };
 
-  useEffect(()=>{
-    localStorage.setItem("stepTwo",JSON.stringify(formValue))
-    console.log(formValue);
-    
-  },[formValue])
+  useEffect(() => {
+    if (typeof window !== "undefined")
+      localStorage.setItem("stepTwo", JSON.stringify(formValue));
+  }, [formValue]);
   const checkValue = () => {
     let newErrors = {};
-     
+
     if (!formValue.email) {
       newErrors.email = "Мэйл хаягаа оруулна уу";
     } else if (!checkEmail.test(formValue.email)) {
       newErrors.email = "Зөв мэйл хаягаа оруулна уу";
     }
 
-    if (!formValue.phone ) {
+    if (!formValue.phone) {
       newErrors.phone = "Утасны дугаараа оруулна уу.";
     } else if (formValue.phone.length != 8) {
       newErrors.phone = "Зөв утасны дугаараа оруулна уу.";
@@ -58,47 +58,60 @@ export const StepTwo = (props) => {
 
     if (!formValue.confirm) {
       newErrors.confirm = "Нууц үгээ давтаж оруулна уу";
-    }else if(formValue.confirm != formValue.password){
+    } else if (formValue.confirm != formValue.password) {
       newErrors.confirm = "Нууц үг таарахгүй байна.";
     }
 
     setErrors(newErrors);
     Object.keys(newErrors).length == 0 && setStep(3);
     console.log(newErrors);
-    
   };
 
   return (
-    <motion.div className="w-[480px] h-fit bg-white rounded-xl flex flex-col gap-4 justify-between p-8 w3-animation-top"
-    animate={{ x: [0, 100, 0] }}>
+    <motion.div
+      className="w-[480px] h-fit bg-white rounded-xl flex flex-col gap-4 justify-between p-8 w3-animation-top"
+      animate={{ x: [0, 100, 0] }}
+    >
       <div className="flex flex-col gap-4 mx-auto">
         <Header />
         <div className="flex flex-col gap-2">
-        <InputBox
-            texts={{text:"Email", placeholder:"Your email", type:"email"}}
+          <InputBox
+            texts={{ text: "Email", placeholder: "Your email", type: "email" }}
             onChange={onChange}
-            value={formValue.email||""}
+            value={formValue.email || ""}
             errors={errors.email}
           />
           <p className="text-red-500">{errors.email}</p>
           <InputBox
-            texts={{text:"Phone number", placeholder:"Your phone number", type:"number"}}
+            texts={{
+              text: "Phone number",
+              placeholder: "Your phone number",
+              type: "number",
+            }}
             onChange={onChange}
-            value={formValue.phone||""}
+            value={formValue.phone || ""}
             errors={errors.phone}
           />
           <p className="text-red-500">{errors.phone}</p>
           <InputBox
-            texts={{text:"Password", placeholder:"Your password", type:"password"}}
+            texts={{
+              text: "Password",
+              placeholder: "Your password",
+              type: "password",
+            }}
             onChange={onChange}
-            value={formValue.password||""}
+            value={formValue.password || ""}
             errors={errors.password}
           />
           <p className="text-red-500">{errors?.password}</p>
           <InputBox
-            texts={{text:"Confirm password", placeholder:"Your confirm password", type:"password"}}
+            texts={{
+              text: "Confirm password",
+              placeholder: "Your confirm password",
+              type: "password",
+            }}
             onChange={onChange}
-            value={formValue.confirm||""}
+            value={formValue.confirm || ""}
             errors={errors.confirm}
           />
           <p className="text-red-500">{errors?.confirm}</p>

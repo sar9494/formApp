@@ -1,8 +1,8 @@
-export const BackButton = (props) =>{
-    const {setStep,step} =props
+export const BackButton = (props) => {
+    const { setStep, step } = props
 
     const onClick = () => {
-        setStep(step-1)
+        setStep(step - 1)
     }
 
     return (

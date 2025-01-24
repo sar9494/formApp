@@ -1,8 +1,8 @@
 "use client";
 
-import { useState , useEffect} from "react";
+import { useState, useEffect } from "react";
 import moment from "moment";
-import { motion } from "motion/react"
+import { motion } from "motion/react";
 
 import {
   Header,
@@ -15,7 +15,10 @@ import {
 export const StepThree = (props) => {
   const { step, setStep } = props;
   const [formValue, setFormValue] = useState(() => {
-    return JSON.parse(localStorage.getItem("stepThree") || "{}");
+    return JSON.parse(
+      (typeof window !== "undefined" && localStorage.getItem("stepThree")) ||
+        "{}"
+    );
   });
   const [errors, setErrors] = useState({});
 
@@ -45,29 +48,31 @@ export const StepThree = (props) => {
       );
       if (year < 18) {
         newError.date = "Та 18 ба түүнээс дээш настай байх ёстой.";
-      }
-      else{
-        localStorage.setItem("date",formValue.date)
+      } else {
+        localStorage.setItem("date", formValue.date);
       }
     }
-    if(!formValue.profile){
-      newError.profile="Профайл зурагаа оруулна уу"
+    if (!formValue.profile) {
+      newError.profile = "Профайл зурагаа оруулна уу";
     }
     setErrors(newError);
-    Object.keys(newError).length == 0 && setStep(4); 
+    Object.keys(newError).length == 0 && setStep(4);
     Object.keys(newError).length == 0 && localStorage.clear();
   };
   const backIconClick = () => {
     setFormValue({ ...formValue, profile: "" });
   };
 
-  useEffect(()=>{
-    localStorage.setItem("stepThree",JSON.stringify(formValue))
-  },[formValue])
+  useEffect(() => {
+    if (typeof window !== "undefined")
+      localStorage.setItem("stepThree", JSON.stringify(formValue));
+  }, [formValue]);
 
   return (
-    <motion.div className="w-[480px] h-[655px] bg-white rounded-xl flex flex-col gap-4 justify-between p-8"
-    animate={{ x: [0, 100, 0] }}>
+    <motion.div
+      className="w-[480px] h-[655px] bg-white rounded-xl flex flex-col gap-4 justify-between p-8"
+      animate={{ x: [0, 100, 0] }}
+    >
       <div className="flex flex-col gap-4 mx-auto">
         <Header />
         <div className="flex flex-col gap-2">
@@ -76,11 +81,14 @@ export const StepThree = (props) => {
           </label>
           <input
             type="date" //"p-3 outline-blue-600 border rounded-md"
-            className={!errors?.date?("p-3 outline-blue-600 border rounded-md") :("p-3 border-red-500 border rounded-md w3-animation-top")}
+            className={
+              !errors?.date
+                ? "p-3 outline-blue-600 border rounded-md"
+                : "p-3 border-red-500 border rounded-md w3-animation-top"
+            }
             name="date"
             onChange={onChange}
-            value={formValue.date||""}
-            
+            value={formValue.date || ""}
           />
           <p className="text-red-500">{errors?.date}</p>
           <div className="">
@@ -104,23 +112,22 @@ export const StepThree = (props) => {
             )}
             {!formValue?.profile && (
               <>
-              <label
-                name="profile"
-                className="cursor-pointer w-[416px] h-[180px] bg-[#F4F4F4] rounded-md flex flex-col justify-center items-center relative"
-              >
-                <ImageInputIcon />
-                <h3>Browse or Drop Image</h3>
-                <input
-                  hidden
-                  type="file"
-                  accept="image/*"
+                <label
                   name="profile"
-                  onChange={onChange}
-                />
-              </label>
+                  className="cursor-pointer w-[416px] h-[180px] bg-[#F4F4F4] rounded-md flex flex-col justify-center items-center relative"
+                >
+                  <ImageInputIcon />
+                  <h3>Browse or Drop Image</h3>
+                  <input
+                    hidden
+                    type="file"
+                    accept="image/*"
+                    name="profile"
+                    onChange={onChange}
+                  />
+                </label>
                 <p className="text-red-600">{errors?.profile}</p>
               </>
-              
             )}
           </div>
         </div>
