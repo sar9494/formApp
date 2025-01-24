@@ -2,6 +2,8 @@
 
 import { useState , useEffect} from "react";
 import moment from "moment";
+import { motion } from "motion/react"
+
 import {
   Header,
   ContinueButton,
@@ -64,7 +66,8 @@ export const StepThree = (props) => {
   },[formValue])
 
   return (
-    <div className="w-[480px] h-[655px] bg-white rounded-xl flex flex-col gap-4 justify-between p-8">
+    <motion.div className="w-[480px] h-[655px] bg-white rounded-xl flex flex-col gap-4 justify-between p-8"
+    animate={{ x: [0, 100, 0] }}>
       <div className="flex flex-col gap-4 mx-auto">
         <Header />
         <div className="flex flex-col gap-2">
@@ -73,7 +76,7 @@ export const StepThree = (props) => {
           </label>
           <input
             type="date" //"p-3 outline-blue-600 border rounded-md"
-            className={!errors?.date?("p-3 outline-blue-600 border rounded-md") :("p-3 border-red-500 border rounded-md")}
+            className={!errors?.date?("p-3 outline-blue-600 border rounded-md") :("p-3 border-red-500 border rounded-md w3-animation-top")}
             name="date"
             onChange={onChange}
             value={formValue.date||""}
@@ -91,7 +94,7 @@ export const StepThree = (props) => {
               >
                 <img
                   src={formValue.profile}
-                  className="w-full h-full rounded-md"
+                  className="w-full h-full rounded-md object-cover"
                 ></img>
                 <BackIcon
                   className="absolute top-[20px] right-[20px]"
@@ -126,7 +129,7 @@ export const StepThree = (props) => {
         <BackButton step={step} setStep={setStep} />
         <ContinueButton text={"Continue 3/3"} onClick={checkValue} />
       </div>
-    </div>
+    </motion.div>
   );
 };
 //local storage

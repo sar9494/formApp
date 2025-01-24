@@ -1,6 +1,8 @@
 "use client";
 import { useState ,useEffect} from "react";
 import { Header, InputBox, ContinueButton, BackButton } from "./index";
+import { motion } from "motion/react"
+
 
 export const StepTwo = (props) => {
   const { step, setStep } = props;
@@ -27,17 +29,19 @@ export const StepTwo = (props) => {
 
   useEffect(()=>{
     localStorage.setItem("stepTwo",JSON.stringify(formValue))
+    console.log(formValue);
+    
   },[formValue])
   const checkValue = () => {
     let newErrors = {};
      
     if (!formValue.email) {
-      newErrors.mail = "Мэйл хаягаа оруулна уу";
+      newErrors.email = "Мэйл хаягаа оруулна уу";
     } else if (!checkEmail.test(formValue.email)) {
-      newErrors.mail = "Зөв мэйл хаягаа оруулна уу";
+      newErrors.email = "Зөв мэйл хаягаа оруулна уу";
     }
 
-    if (!formValue.phone || formValue.phone.length != 8) {
+    if (!formValue.phone ) {
       newErrors.phone = "Утасны дугаараа оруулна уу.";
     } else if (formValue.phone.length != 8) {
       newErrors.phone = "Зөв утасны дугаараа оруулна уу.";
@@ -52,16 +56,21 @@ export const StepTwo = (props) => {
       newErrors.password = "Үсэг тоо агуулсан 6 орон оруулна уу";
     }
 
-    if (!formValue.confirm || formValue.confirm != formValue.password) {
+    if (!formValue.confirm) {
       newErrors.confirm = "Нууц үгээ давтаж оруулна уу";
+    }else if(formValue.confirm != formValue.password){
+      newErrors.confirm = "Нууц үг таарахгүй байна.";
     }
 
     setErrors(newErrors);
     Object.keys(newErrors).length == 0 && setStep(3);
+    console.log(newErrors);
+    
   };
 
   return (
-    <div className="w-[480px] h-[655px] bg-white rounded-xl flex flex-col gap-4 justify-between p-8">
+    <motion.div className="w-[480px] h-fit bg-white rounded-xl flex flex-col gap-4 justify-between p-8 w3-animation-top"
+    animate={{ x: [0, 100, 0] }}>
       <div className="flex flex-col gap-4 mx-auto">
         <Header />
         <div className="flex flex-col gap-2">
@@ -71,14 +80,14 @@ export const StepTwo = (props) => {
             value={formValue.email||""}
             errors={errors.email}
           />
-          <p className="text-red-500">{errors?.email}</p>
+          <p className="text-red-500">{errors.email}</p>
           <InputBox
             texts={{text:"Phone number", placeholder:"Your phone number", type:"number"}}
             onChange={onChange}
             value={formValue.phone||""}
             errors={errors.phone}
           />
-          <p className="text-red-500">{errors?.phone}</p>
+          <p className="text-red-500">{errors.phone}</p>
           <InputBox
             texts={{text:"Password", placeholder:"Your password", type:"password"}}
             onChange={onChange}
@@ -99,6 +108,6 @@ export const StepTwo = (props) => {
         <BackButton step={step} setStep={setStep} />
         <ContinueButton onClick={checkValue} text={"Continue 2/3"} />
       </div>
-    </div>
+    </motion.div>
   );
 };

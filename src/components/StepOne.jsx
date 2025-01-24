@@ -2,6 +2,7 @@
 
 import { Header, InputBox, ContinueButton } from "./index";
 import { useEffect, useState } from "react";
+import { motion } from "motion/react"
 
 export const StepOne = (props) => {
   const { step, setStep } = props;
@@ -46,7 +47,8 @@ export const StepOne = (props) => {
   };
 
   return (
-    <div className="w-[480px] h-[655px] bg-white rounded-xl flex flex-col gap-4 justify-between p-8">
+    <motion.div className="w-[480px] h-[655px] bg-white rounded-xl flex flex-col gap-4 justify-between p-8 w3-animation-top"
+    animate={{ x: [0, 100, 0] }}>
       <div key={1} className="flex flex-col gap-4 mx-auto">
         <Header />
         <div key={1} className="flex flex-col gap-2">
@@ -74,6 +76,6 @@ export const StepOne = (props) => {
         </div>
       </div>
       <ContinueButton onClick={checkValue} text={"Continue 1/3"} />
-    </div>
+    </motion.div>
   );
 };
