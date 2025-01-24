@@ -10,6 +10,7 @@ import {
   BackButton,
   ImageInputIcon,
   BackIcon,
+  InputBox,
 } from "./index";
 
 export const StepThree = (props) => {
@@ -70,27 +71,19 @@ export const StepThree = (props) => {
 
   return (
     <motion.div
-      className="w-[480px] h-[655px] bg-white rounded-xl flex flex-col gap-4 justify-between p-8"
+      className="w-[480px] h-fit bg-white rounded-xl flex flex-col gap-4 justify-between p-8"
       animate={{ x: [0, 100, 0] }}
     >
       <div className="flex flex-col gap-4 mx-auto">
         <Header />
         <div className="flex flex-col gap-2">
-          <label className="font-semibold" htmlFor="date">
-            Date of birth <b className="text-red-500">*</b>
-          </label>
-          <input
-            type="date" //"p-3 outline-blue-600 border rounded-md"
-            className={
-              !errors?.date
-                ? "p-3 outline-blue-600 border rounded-md"
-                : "p-3 border-red-500 border rounded-md w3-animation-top"
-            }
-            name="date"
+          <InputBox
+            texts={{ text: "Date of birth", type: "date" }}
             onChange={onChange}
             value={formValue.date || ""}
+            errors={errors.date}
+            name={"date"}
           />
-          <p className="text-red-500">{errors?.date}</p>
           <div className="">
             <label className="font-semibold">
               Profile image <b className="text-red-500">*</b>

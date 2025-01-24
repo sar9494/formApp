@@ -15,15 +15,16 @@ export const StepTwo = (props) => {
   const checkEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   const onChange = (e) => {
-    if (e.target.placeholder.includes("email")) {
+    if (e.target.name === "email") {
       setFormValue({ ...formValue, email: e.target.value });
     }
-    if (e.target.placeholder.includes("phone")) {
+    if (e.target.name === "phone") {
       setFormValue({ ...formValue, phone: e.target.value });
     }
-    if (e.target.placeholder.includes("firm")) {
+    if (e.target.name === "confirm") {
       setFormValue({ ...formValue, confirm: e.target.value });
-    } else if (e.target.placeholder.includes("password")) {
+    }
+    if (e.target.name === "password") {
       setFormValue({ ...formValue, password: e.target.value });
     }
   };
@@ -32,6 +33,7 @@ export const StepTwo = (props) => {
     if (typeof window !== "undefined")
       localStorage.setItem("stepTwo", JSON.stringify(formValue));
   }, [formValue]);
+
   const checkValue = () => {
     let newErrors = {};
 
@@ -64,7 +66,6 @@ export const StepTwo = (props) => {
 
     setErrors(newErrors);
     Object.keys(newErrors).length == 0 && setStep(3);
-    console.log(newErrors);
   };
 
   return (
@@ -76,45 +77,44 @@ export const StepTwo = (props) => {
         <Header />
         <div className="flex flex-col gap-2">
           <InputBox
-            texts={{ text: "Email", placeholder: "Your email", type: "email" }}
+            texts={{ text: "Email", placeholder: "Your email", type: "email", name:"email"}}
             onChange={onChange}
             value={formValue.email || ""}
             errors={errors.email}
           />
-          <p className="text-red-500">{errors.email}</p>
           <InputBox
             texts={{
               text: "Phone number",
               placeholder: "Your phone number",
               type: "number",
+              name:"phone"
             }}
             onChange={onChange}
             value={formValue.phone || ""}
             errors={errors.phone}
           />
-          <p className="text-red-500">{errors.phone}</p>
           <InputBox
             texts={{
               text: "Password",
               placeholder: "Your password",
               type: "password",
+              name:"password"
             }}
             onChange={onChange}
             value={formValue.password || ""}
             errors={errors.password}
           />
-          <p className="text-red-500">{errors?.password}</p>
           <InputBox
             texts={{
               text: "Confirm password",
               placeholder: "Your confirm password",
               type: "password",
+              name:"confirm"
             }}
             onChange={onChange}
             value={formValue.confirm || ""}
             errors={errors.confirm}
           />
-          <p className="text-red-500">{errors?.confirm}</p>
         </div>
       </div>
       <div className="flex gap-[10px]">

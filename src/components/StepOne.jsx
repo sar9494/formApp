@@ -20,13 +20,13 @@ export const StepOne = (props) => {
   }, [formValue]);
 
   const onChange = (e) => {
-    if (e.target.placeholder.includes("first")) {
+    if (e.target.name=="firstname") {
       setFormValue({ ...formValue, firstname: e.target.value });
     }
-    if (e.target.placeholder.includes("last")) {
+    if (e.target.name=="lastname") {
       setFormValue({ ...formValue, lastname: e.target.value });
     }
-    if (e.target.placeholder.includes("user")) {
+    if (e.target.name=="username") {
       setFormValue({ ...formValue, username: e.target.value });
     }
   };
@@ -62,34 +62,34 @@ export const StepOne = (props) => {
               text: "First name",
               placeholder: "Your first name",
               type: "text",
+              name:"firstname"
             }}
             onChange={onChange}
             value={formValue.firstname || ""}
             errors={errors.firstname}
           />
-          <p className="text-red-500">{errors?.firstname}</p>
           <InputBox
             texts={{
               text: "Last name",
               placeholder: "Your last name",
               type: "text",
+              name:"lastname"
             }}
             onChange={onChange}
             value={formValue.lastname || ""}
             errors={errors.lastname}
           />
-          <p className="text-red-500">{errors?.lastname}</p>
           <InputBox
             texts={{
               text: "Username",
               placeholder: "Your username",
               type: "text",
+              name:"username"
             }}
             onChange={onChange}
             value={formValue.username || ""}
             errors={errors.username}
           />
-          <p className="text-red-500">{errors?.username}</p>
         </div>
       </div>
       <ContinueButton onClick={checkValue} text={"Continue 1/3"} />
