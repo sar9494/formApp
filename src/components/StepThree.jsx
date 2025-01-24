@@ -25,23 +25,27 @@ export const StepThree = (props) => {
 
   const onChange = (e) => {
     const { name, type, value, files } = e.target;
-    if (name == "date") {
+    if (e.target.name == "date") {
       setFormValue({ ...formValue, date: value });
-      setErrors({});
+      setErrors({...errors,date:""});
     }
-    if (name === "profile" && type === "file") {
-      const file = files[0];
-      if (file) {
-        const fileUrl = URL.createObjectURL(file);
-        setFormValue({ ...formValue, profile: fileUrl });
+    if (e.target.name === "profile" && e.target.type === "file") {
+      const file = e.target.files[0];
+      var reader = new FileReader();
+  reader.onloadend = function() {
+    setFormValue({ ...formValue, profile: reader.result });
+  }
+  reader.readAsDataURL(file);
       }
-    }
   };
   const checkValue = () => {
     let newError = {};
     if (!formValue.date) {
       newError.date = "Төрсөн өдрөө оруулна уу";
-    } else {
+    } else if(formValue.date.length===0){
+      newError.date = "Төрсөн өдрөө оруулна уу";
+    }
+    else {
       const year = parseInt(
         moment(formValue.date.split("-").join(""), "YYYYMMDD")
           .fromNow()
@@ -53,6 +57,7 @@ export const StepThree = (props) => {
         localStorage.setItem("date", formValue.date);
       }
     }
+
     if (!formValue.profile) {
       newError.profile = "Профайл зурагаа оруулна уу";
     }
@@ -78,11 +83,10 @@ export const StepThree = (props) => {
         <Header />
         <div className="flex flex-col gap-2">
           <InputBox
-            texts={{ text: "Date of birth", type: "date" }}
+            texts={{ text: "Date of birth", type: "date",name:"date"}}
             onChange={onChange}
             value={formValue.date || ""}
             errors={errors.date}
-            name={"date"}
           />
           <div className="">
             <label className="font-semibold">

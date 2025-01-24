@@ -17,15 +17,19 @@ export const StepTwo = (props) => {
   const onChange = (e) => {
     if (e.target.name === "email") {
       setFormValue({ ...formValue, email: e.target.value });
+      setErrors({...errors,email:""})
     }
     if (e.target.name === "phone") {
       setFormValue({ ...formValue, phone: e.target.value });
+      setErrors({...errors,phone:""})
     }
     if (e.target.name === "confirm") {
       setFormValue({ ...formValue, confirm: e.target.value });
+      setErrors({...errors,confirm:""})
     }
     if (e.target.name === "password") {
       setFormValue({ ...formValue, password: e.target.value });
+      setErrors({...errors,password:""})
     }
   };
 

@@ -22,12 +22,15 @@ export const StepOne = (props) => {
   const onChange = (e) => {
     if (e.target.name=="firstname") {
       setFormValue({ ...formValue, firstname: e.target.value });
+      setErrors({...errors,firstname:""})
     }
     if (e.target.name=="lastname") {
       setFormValue({ ...formValue, lastname: e.target.value });
+      setErrors({...errors,lastname:""})
     }
     if (e.target.name=="username") {
       setFormValue({ ...formValue, username: e.target.value });
+      setErrors({...errors,username:""})
     }
   };
 
